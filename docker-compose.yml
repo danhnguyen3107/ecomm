@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  ecomapp_image:
+    container_name: ecomapp
+    image: dinhdanhnguyen/acomapp_sample:v_1
+    restart: always
+    ports:
+      - 8000:8000
+    environment:
+      RED: 12
+    depends_on:
+      - redis
+    networks:
+      - ecom_network
+    
+  redis:
+    container_name: red
+    restart: always
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - ecom_network
+
+networks:
+  ecom_network:
+    driver: bridge
