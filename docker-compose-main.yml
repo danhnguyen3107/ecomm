@@ -32,8 +32,9 @@ services:
 
   ecomapp_image:
     container_name: ecomapp
-    image: dinhdanhnguyen/acomapp_sample:v_1
+    image: ecomapp_image
     restart: always
+    build: .
     ports:
       - 8000:8000
     environment:
@@ -56,13 +57,13 @@ services:
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_STORAGE_BUCKET_NAME:  ${AWS_STORAGE_BUCKET_NAME}
 
+      
     depends_on:
       postgresqldb:
         condition: service_healthy
       # - redis
     networks:
       - ecom_network
-
     
 
 networks:

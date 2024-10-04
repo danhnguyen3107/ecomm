@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecom-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecom
+  template:
+    metadata:
+      labels:
+        app: ecom
+    spec:
+      containers:
+      - name: ecom
+        image: dinhdanhnguyen/ecom-python:latest
+        ports:
+        - containerPort: 8000
+        env:
+        
+        # Database
+        - name: HOST_db
+          valueFrom:
+            configMapKeyRef:
+              name: ecom-config
+              key: HOST
+        # - name: PORT
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: ecom-config
+        #       key: PORT
+        - name: NAME_db
+          valueFrom:
+            configMapKeyRef:
+              name: ecom-config
+              key: DBNAME
+        - name: USER_db
+          valueFrom:
+            secretKeyRef:
+              name: ecom-secrets
+              key: USER_db
+        - name: PASSWORD_db
+          valueFrom:
+            secretKeyRef:
+              name: ecom-secrets
+              key: PASSWORD_db
+
+
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ecom-secrets
+              key: SECRET_KEY
+        - name: DEBUG
+          valueFrom:
+            secretKeyRef:
+              name: ecom-secrets
+              key: DEBUG
+
+      # Email for authentication
+
+        - name: EMAIL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: ecom-secrets
+              key: EMAIL_HOST
+        - name: EMAIL_PORT
+          valueFrom:
+            secretKeyRef:
+              name: ecom-secrets
+              key: EMAIL_PORT
+        - name: EMAIL_HOST_USER
+          valueFrom:
+            secretKeyRef:
+              name: ecom-secrets
+              key: EMAIL_HOST_USER
+        - name: EMAIL_HOST_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ecom-secrets
+              key: EMAIL_HOST_PASSWORD
+        - name: EMAIL_USE_TLS
+          valueFrom:
+            secretKeyRef:
+              name: ecom-secrets
+              key: EMAIL_USE_TLS
+
+      # AWS Bucket
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: ecom-secrets
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ecom-secrets
+              key: AWS_SECRET_ACCESS_KEY
+        - name: AWS_STORAGE_BUCKET_NAME
+          valueFrom:
+            secretKeyRef:
+              name: ecom-secrets
+              key: AWS_STORAGE_BUCKET_NAME
+
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - worker1  # Replace with your first worker node hostname
+
