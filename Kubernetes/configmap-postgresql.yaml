@@ -5,7 +5,11 @@ metadata:
   name: ecom-config
 
 data:
-  HOST: ${HOST_db}
+  HOST: postgres-service
   PORT: '5432'
-  DBNAME: ${NAME_db}
+  DBNAME: ecomapp_db
+  RED: '12'
+  USER_db: postgres
+
+
 

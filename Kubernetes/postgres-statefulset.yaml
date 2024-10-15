@@ -19,6 +19,7 @@ spec:
         ports:
         - containerPort: 5432
         env:
+        
         - name: POSTGRES_DB
           valueFrom:
             configMapKeyRef:
@@ -28,7 +29,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: ecom-secrets
-              key: PASSWORD
+              key: PASSWORD_db
               
         volumeMounts:
         - name: postgres-storage
@@ -47,6 +48,3 @@ spec:
                     operator: In
                     values:
                       - worker1  # Replace with your first worker node hostname
-
-
-
